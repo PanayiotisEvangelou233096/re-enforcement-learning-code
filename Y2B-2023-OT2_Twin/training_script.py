@@ -7,10 +7,10 @@ from clearml import Task
 from test_wrapper import OT2Env
 
 task = Task.init(project_name="Pendulum-v1/Panagiotis", 
-                 task_name="Experiment V1.0")
+                 task_name="Experiment V1.1")
 
 # Add shimmy as a requirement
-task.set_requirements('shimmy'>=2.0)
+Task.add_requirements("shimmy>=2.0")
 os.system("pip install 'shimmy>=2.0'")
 
 task.set_base_docker('deanis/2023y2b-rl:latest')
