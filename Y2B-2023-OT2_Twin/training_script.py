@@ -8,8 +8,8 @@ Task.add_requirements("shimmy>=2.0")
 os.system("pip install shimmy>=2.0")
 
 task = Task.init(
-    project_name="Pendulum-v1/Panagiotis",
-    task_name="Experiment V1.2"
+    project_name="Mentor Group K/Group 2",
+    task_name="shitfuck 2"
 )
 
 task.set_base_docker('deanis/2023y2b-rl:latest')
@@ -34,11 +34,14 @@ hyperparameters = {
 }
 
 # Initialize and Train Model
-try:
-    print("Initializing PPO model...")
-    model = PPO("MlpPolicy", env, verbose=1, **hyperparameters)
-    print("Starting training...")
-    model.learn(total_timesteps=10000, progress_bar=True)
-    print("Training completed.")
-except Exception as e:
-    print(f"Error during training: {e}")
+model = PPO("MlpPolicy", env, verbose=1, **hyperparameters)
+print("Starting training...")
+model.learn(total_timesteps=10000, progress_bar=True)
+print("Training completed.")
+
+# Save the model
+model_path = "ppo_model.zip"
+model.save(model_path)
+
+# Upload model
+task.upload_artifact(name="trained_model", artifact_object=model_path)
