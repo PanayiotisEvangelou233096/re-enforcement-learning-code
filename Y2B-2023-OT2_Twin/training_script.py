@@ -19,7 +19,7 @@ task.execute_remotely(queue_name="default")
 
 # Initialize Environment
 print("Creating OT2 environment...")
-env = OT2Env(render=False, max_steps=1000)
+env = OT2Env(should_render=False, max_steps=1000)
 
 # Define Hyperparameters
 hyperparameters = {
