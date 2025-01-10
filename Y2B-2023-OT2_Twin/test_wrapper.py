@@ -4,14 +4,14 @@ import numpy as np
 from sim_class import Simulation
 
 class OT2Env(gym.Env):
-    def __init__(self, render=False, max_steps=1000):
+    def __init__(self, should_render=False, max_steps=1000):
         
         super(OT2Env, self).__init__()
-        self.render = render
+        self.should_render = should_render
         self.max_steps = max_steps
 
         # Create the simulation environment
-        self.sim = Simulation(num_agents=1, render=render)
+        self.sim = Simulation(num_agents=1, render=should_render)
 
         # Define action and observation space
         # They must be gym.spaces objects
@@ -40,7 +40,7 @@ class OT2Env(gym.Env):
         # Reset the number of steps
         self.steps = 0
 
-        return observation, {}
+        return observation
 
     def step(self, action):
         # Execute one time step within the environment
@@ -54,9 +54,15 @@ class OT2Env(gym.Env):
         # now we need to process the observation and extract the relevant information, the pipette position, convert it to a numpy array, and append the goal position and make sure the array is of type np.float32
         pipette_position = observation[robot_id]['pipette_position']
         observation = np.array(pipette_position + list(self.goal_position), dtype=np.float32)
+        print(observation)
 
         # Calculate the reward, this is something that you will need to experiment with to get the best results
         reward = -np.linalg.norm(np.array(pipette_position) - self.goal_position)
+        print(f"Reward: {reward}")
+
+
+        distance_to_goal = np.linalg.norm(pipette_position - self.goal_position)
+        print(f"Distance to goal: {distance_to_goal}")
         
         # next we need to check if the if the task has been completed and if the episode should be terminated
         # To do this we need to calculate the distance between the pipette position and the goal position and if it is below a certain threshold, we will consider the task complete. 
