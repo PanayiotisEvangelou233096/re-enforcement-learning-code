@@ -11,7 +11,7 @@ os.system("pip install shimmy>=2.0")
 
 task = Task.init(
     project_name="Mentor Group K/Group 2",
-    task_name="Pan's Experiment 5",
+    task_name="Pan's Experiment 6",
 )
 
 task.set_base_docker('deanis/2023y2b-rl:latest')
@@ -24,10 +24,10 @@ env = OT2Env(should_render=False, max_steps=1000)
 # Define Hyperparameters
 hyperparameters = {
     'n_steps': 1024,
-    'batch_size': 32,
-    'n_epochs': 4,
+    'batch_size': 64,
+    'n_epochs': 10,
     'gamma': 0.99,
-    'learning_rate': 1e-4,
+    'learning_rate': 3e-4,
     'clip_range': 0.2,
     'gae_lambda': 0.95,
     'ent_coef': 0.01,
@@ -57,7 +57,7 @@ class ClearMLCallback(BaseCallback):
 # Initialize and Train Model
 model = PPO("MlpPolicy", env, verbose=1, **hyperparameters)
 print("Starting training...")
-model.learn(total_timesteps=10000, progress_bar=True, callback=ClearMLCallback(task))
+model.learn(total_timesteps=1000000, progress_bar=True, callback=ClearMLCallback(task))
 print("Training completed.")
 
 # Save the model

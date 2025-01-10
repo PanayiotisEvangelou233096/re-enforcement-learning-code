@@ -55,7 +55,7 @@ class OT2Env(gym.Env):
         # now we need to process the observation and extract the relevant information, the pipette position, convert it to a numpy array, and append the goal position and make sure the array is of type np.float32
         pipette_position = observation[robot_id]['pipette_position']
         observation = np.array(pipette_position + list(self.goal_position), dtype=np.float32)
-        print(observation)
+        # print(observation)
 
         # Calculate the reward, this is something that you will need to experiment with to get the best results
         reward = -np.linalg.norm(np.array(pipette_position) - self.goal_position)
