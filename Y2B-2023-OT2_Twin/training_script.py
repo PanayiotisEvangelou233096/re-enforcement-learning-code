@@ -11,7 +11,7 @@ os.system("pip install shimmy>=2.0")
 
 task = Task.init(
     project_name="Mentor Group K/Group 2",
-    task_name="Pan's Experiment 4",
+    task_name="Pan's Experiment 5",
 )
 
 task.set_base_docker('deanis/2023y2b-rl:latest')
@@ -38,17 +38,18 @@ hyperparameters = {
 # Define custom callback
 
 class ClearMLCallback(BaseCallback):
-    def init(self, task, verbose=0):
-        super(ClearMLCallback, self).init(verbose)
+    def __init__(self, task, verbose=0):  
+        super(ClearMLCallback, self).__init__(verbose)
         self.task = task
 
     def _on_step(self) -> bool:
         # Log the reward
-        reward = self.locals['rewards']
+        rewards = self.locals.get('rewards', [0])  
+        average_reward = sum(rewards) / len(rewards)
         self.task.get_logger().report_scalar(
             title='Reward',
             series='reward',
-            value=reward,
+            value=average_reward,
             iteration=self.num_timesteps
         )
         return True
