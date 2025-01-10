@@ -3,13 +3,15 @@ from stable_baselines3 import PPO
 from clearml import Task
 from test_wrapper import OT2Env
 
+from stable_baselines3.common.callbacks import BaseCallback
+
 # Initialize ClearML Task
 Task.add_requirements("shimmy>=2.0")
 os.system("pip install shimmy>=2.0")
 
 task = Task.init(
     project_name="Mentor Group K/Group 2",
-    task_name="shitfuck 2"
+    task_name="Pan's Experiment 3",
 )
 
 task.set_base_docker('deanis/2023y2b-rl:latest')
@@ -33,10 +35,28 @@ hyperparameters = {
     'max_grad_norm': 0.5,
 }
 
+# Define custom callback
+
+class ClearMLCallback(BaseCallback):
+    def init(self, task, verbose=0):
+        super(ClearMLCallback, self).init(verbose)
+        self.task = task
+
+    def _on_step(self) -> bool:
+        # Log the reward
+        reward = self.locals['rewards']
+        self.task.get_logger().report_scalar(
+            title='Reward',
+            series='reward',
+            value=reward,
+            iteration=self.num_timesteps
+        )
+        return True
+
 # Initialize and Train Model
 model = PPO("MlpPolicy", env, verbose=1, **hyperparameters)
 print("Starting training...")
-model.learn(total_timesteps=10000, progress_bar=True)
+model.learn(total_timesteps=10000, progress_bar=True, callback=ClearMLCallback(task))
 print("Training completed.")
 
 # Save the model
