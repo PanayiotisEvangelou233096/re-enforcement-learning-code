@@ -40,7 +40,8 @@ class OT2Env(gym.Env):
         # Reset the number of steps
         self.steps = 0
 
-        return observation
+        info = {} 
+        return observation, info
 
     def step(self, action):
         # Execute one time step within the environment
