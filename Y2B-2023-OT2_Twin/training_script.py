@@ -11,7 +11,7 @@ os.system("pip install shimmy>=2.0")
 
 task = Task.init(
     project_name="Mentor Group K/Group 2",
-    task_name="Pan's Experiment 3",
+    task_name="Pan's Experiment 4",
 )
 
 task.set_base_docker('deanis/2023y2b-rl:latest')
